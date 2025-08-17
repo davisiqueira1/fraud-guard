@@ -5,7 +5,7 @@ import com.davisiqueira.fraud_guard.dto.transaction.TransactionResponseDTO;
 import com.davisiqueira.fraud_guard.model.TransactionModel;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface TransactionMapper {
     TransactionResponseDTO toResponseDTO(TransactionModel transaction);
     TransactionModel toModel(TransactionRequestDTO transaction);
