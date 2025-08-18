@@ -5,7 +5,7 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.List;
 
-public class FraudDetectionUtils {
+public final class FraudDetectionUtils {
     public static BigDecimal calculateStandardDeviation(List<BigDecimal> values) {
         BigDecimal average = calculateAverage(values);
         BigDecimal variance = calculateVariance(values, average);
