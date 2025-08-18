@@ -26,10 +26,10 @@ public class TransactionModel {
     private BigDecimal value;
 
     @Column(nullable = false)
-    private Float lat;
+    private Double lat;
 
     @Column(nullable = false)
-    private Float lon;
+    private Double lon;
 
     @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT false")
     private Boolean suspect = false;

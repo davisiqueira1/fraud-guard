@@ -8,7 +8,7 @@ public record TransactionResponseDTO(
         String cpf,
         Instant date,
         BigDecimal value,
-        Float lat,
-        Float lon
+        Double lat,
+        Double lon
 ) {
 }
