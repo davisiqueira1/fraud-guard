@@ -2,7 +2,7 @@ package com.davisiqueira.fraud_guard.service.fraud;
 
 import com.davisiqueira.fraud_guard.model.TransactionModel;
 import com.davisiqueira.fraud_guard.repository.TransactionRepository;
-import com.davisiqueira.fraud_guard.util.FraudDetectionUtils;
+import com.davisiqueira.fraud_guard.util.StatisticalUtils;
 import com.davisiqueira.fraud_guard.util.geolocalization.Coordinates;
 import com.davisiqueira.fraud_guard.util.geolocalization.GeolocalizationUtils;
 import org.springframework.stereotype.Service;
@@ -62,7 +62,7 @@ public class FraudDetectionService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
                 .divide(BigDecimal.valueOf(values.size()), RoundingMode.HALF_UP);
 
-        BigDecimal standardDeviation = FraudDetectionUtils.calculateStandardDeviation(values);
+        BigDecimal standardDeviation = StatisticalUtils.calculateStandardDeviation(values);
 
         return isSuspectValue(transaction.getValue(), average, standardDeviation);
     }

@@ -5,8 +5,8 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.List;
 
-public final class FraudDetectionUtils {
-    private FraudDetectionUtils() {}
+public final class StatisticalUtils {
+    private StatisticalUtils() {}
 
     public static BigDecimal calculateStandardDeviation(List<BigDecimal> values) {
         BigDecimal average = calculateAverage(values);
