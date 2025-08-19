@@ -18,4 +18,6 @@ public interface TransactionRepository extends JpaRepository<TransactionModel, L
 
     @Query(value = "SELECT COUNT(*) FROM transactions t WHERE t.date >= :date", nativeQuery = true)
     int countTransactionSince(@Param("date") LocalDateTime date);
+
+    List<TransactionModel> findAllBySuspect(Boolean suspect);
 }

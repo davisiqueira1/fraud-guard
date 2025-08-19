@@ -9,6 +9,8 @@ import com.davisiqueira.fraud_guard.service.fraud.FraudDetectionService;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TransactionService {
@@ -32,5 +34,27 @@ public class TransactionService {
         }
 
         return mapper.toResponseDTO(repository.save(transaction));
+    }
+
+    public List<TransactionResponseDTO> getTransactionsByCpf(String cpf) {
+        List<TransactionModel> transactions = repository.findAllByCpf(cpf);
+
+        return transactions.stream().map(mapper::toResponseDTO).toList();
+    }
+
+    public TransactionResponseDTO getTransactionById(Long id) throws Exception {
+        Optional<TransactionModel> transaction = repository.findById(id);
+
+        if (transaction.isEmpty()) {
+            throw new Exception("Transaction with id :: " + id + " not found");
+        }
+
+        return mapper.toResponseDTO(transaction.get());
+    }
+
+    public List<TransactionResponseDTO> getSuspectTransactions() {
+        List<TransactionModel> transactions = repository.findAllBySuspect(true);
+
+        return transactions.stream().map(mapper::toResponseDTO).toList();
     }
 }
