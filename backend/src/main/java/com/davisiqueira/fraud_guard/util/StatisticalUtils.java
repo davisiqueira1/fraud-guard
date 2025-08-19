@@ -30,6 +30,10 @@ public final class StatisticalUtils {
     }
 
     public static BigDecimal calculateStandardDeviation(List<BigDecimal> values) {
+        if (values == null || values.isEmpty()) {
+            return BigDecimal.ZERO;
+        }
+
         BigDecimal average = calculateAverage(values);
         BigDecimal variance = calculateVariance(values, average);
 
@@ -38,6 +42,10 @@ public final class StatisticalUtils {
     }
 
     private static BigDecimal calculateAverage(List<BigDecimal> values) {
+        if (values == null || values.isEmpty()) {
+            return BigDecimal.ZERO;
+        }
+
         return values
                 .stream()
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
@@ -45,6 +53,10 @@ public final class StatisticalUtils {
     }
 
     private static BigDecimal calculateVariance(List<BigDecimal> values, BigDecimal average) {
+        if (values == null || values.isEmpty() || Objects.equals(average, BigDecimal.ZERO)) {
+            return BigDecimal.ZERO;
+        }
+
         return values
                 .stream()
                 .map(value -> value.subtract(average).pow(2))
@@ -57,7 +69,7 @@ public final class StatisticalUtils {
     }
 
     private static BigDecimal getMinValue(List<BigDecimal> values) {
-        if (values.isEmpty()) {
+        if (values == null || values.isEmpty()) {
             return BigDecimal.ZERO;
         }
 
@@ -69,7 +81,7 @@ public final class StatisticalUtils {
     }
 
     private static BigDecimal getMaxValue(List<BigDecimal> values) {
-        if (values.isEmpty()) {
+        if (values == null || values.isEmpty()) {
             return BigDecimal.ZERO;
         }
 
