@@ -2,21 +2,24 @@ package com.davisiqueira.fraud_guard.service;
 
 import com.davisiqueira.fraud_guard.dto.transaction.TransactionRequestDTO;
 import com.davisiqueira.fraud_guard.dto.transaction.TransactionResponseDTO;
+import com.davisiqueira.fraud_guard.dto.transaction.TransactionsStatisticsDTO;
 import com.davisiqueira.fraud_guard.mapper.TransactionMapper;
 import com.davisiqueira.fraud_guard.model.TransactionModel;
 import com.davisiqueira.fraud_guard.repository.TransactionRepository;
 import com.davisiqueira.fraud_guard.service.fraud.FraudDetectionService;
+import com.davisiqueira.fraud_guard.util.StatisticalUtils;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class TransactionService {
-    private TransactionRepository repository;
-    private TransactionMapper mapper;
-    private FraudDetectionService fraudService;
+    private final TransactionRepository repository;
+    private final TransactionMapper mapper;
+    private final FraudDetectionService fraudService;
 
     public TransactionService(TransactionRepository repository, TransactionMapper mapper, FraudDetectionService fraudService) {
         this.repository = repository;
@@ -56,5 +59,14 @@ public class TransactionService {
         List<TransactionModel> transactions = repository.findAllBySuspect(true);
 
         return transactions.stream().map(mapper::toResponseDTO).toList();
+    }
+
+    public TransactionsStatisticsDTO getTransactionsStats() {
+        List<BigDecimal> values = repository.findAll()
+                .stream()
+                .map(TransactionModel::getValue)
+                .toList();
+
+        return StatisticalUtils.describeValues(values);
     }
 }

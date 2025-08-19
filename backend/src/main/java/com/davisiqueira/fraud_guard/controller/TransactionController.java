@@ -2,6 +2,7 @@ package com.davisiqueira.fraud_guard.controller;
 
 import com.davisiqueira.fraud_guard.dto.transaction.TransactionRequestDTO;
 import com.davisiqueira.fraud_guard.dto.transaction.TransactionResponseDTO;
+import com.davisiqueira.fraud_guard.dto.transaction.TransactionsStatisticsDTO;
 import com.davisiqueira.fraud_guard.service.TransactionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,5 +45,12 @@ public class TransactionController {
         List<TransactionResponseDTO> suspectTransactions = service.getSuspectTransactions();
 
         return new ResponseEntity<>(suspectTransactions, HttpStatus.OK);
+    }
+
+    @GetMapping("/statistics")
+    public ResponseEntity<TransactionsStatisticsDTO> getTransactionsStats() {
+        TransactionsStatisticsDTO stats = service.getTransactionsStats();
+
+        return new ResponseEntity<>(stats, HttpStatus.OK);
     }
 }
