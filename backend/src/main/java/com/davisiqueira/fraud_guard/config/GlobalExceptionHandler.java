@@ -1,9 +1,12 @@
 package com.davisiqueira.fraud_guard.config;
 
+import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.davisiqueira.fraud_guard.exception.ApiErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -59,10 +62,36 @@ public class GlobalExceptionHandler {
         HttpStatus status = HttpStatus.NOT_FOUND;
 
         Map<String, String> errors = Map.ofEntries(
-                Map.entry("username", e.getMessage())
+                Map.entry(e.getClass().getSimpleName(), e.getMessage())
         );
 
         ApiErrorResponse response = buildResponse("Authentication error", request, status, errors);
+
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ExceptionHandler(JWTVerificationException.class)
+    public ResponseEntity<ApiErrorResponse> handleJwtVerification(RuntimeException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+
+        Map<String, String> errors = Map.ofEntries(
+                Map.entry(e.getClass().getSimpleName(), e.getMessage())
+        );
+
+        ApiErrorResponse response = buildResponse("Invalid or expired JWT token", request, status, errors);
+
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ExceptionHandler(JWTCreationException.class)
+    public ResponseEntity<ApiErrorResponse> handleJwtCreation(RuntimeException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+
+        Map<String, String> errors = Map.ofEntries(
+                Map.entry(e.getClass().getSimpleName(), e.getMessage())
+        );
+
+        ApiErrorResponse response = buildResponse("Failed to generate JWT token", request, status, errors);
 
         return new ResponseEntity<>(response, status);
     }
