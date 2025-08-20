@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidCpf {
-    String message() default "Invalid CPF";
+    String message() default "CPF must contain 11 digits and be valid.";
     Class<?>[] groups() default {};
     Class<? super Payload>[] payload() default {};
 }
