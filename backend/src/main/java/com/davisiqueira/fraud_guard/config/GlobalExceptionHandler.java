@@ -6,12 +6,14 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -48,6 +50,19 @@ public class GlobalExceptionHandler {
                 ));
 
         ApiErrorResponse response = buildResponse("Validation error", request, status, errors);
+
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleUsernameNotFound(UsernameNotFoundException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+
+        Map<String, String> errors = Map.ofEntries(
+                Map.entry("username", e.getMessage())
+        );
+
+        ApiErrorResponse response = buildResponse("Authentication error", request, status, errors);
 
         return new ResponseEntity<>(response, status);
     }
