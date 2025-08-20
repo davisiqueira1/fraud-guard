@@ -4,14 +4,18 @@ import com.davisiqueira.fraud_guard.dto.transaction.TransactionRequestDTO;
 import com.davisiqueira.fraud_guard.dto.transaction.TransactionResponseDTO;
 import com.davisiqueira.fraud_guard.dto.transaction.TransactionsStatisticsDTO;
 import com.davisiqueira.fraud_guard.service.TransactionService;
+import com.davisiqueira.fraud_guard.validation.validator.cpf.ValidCpf;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
+@Validated
 @RequestMapping("/api/transactions")
 public class TransactionController {
     private final TransactionService service;
@@ -21,13 +25,13 @@ public class TransactionController {
     }
 
     @PostMapping
-    public ResponseEntity<TransactionResponseDTO> create(@RequestBody TransactionRequestDTO transaction) {
+    public ResponseEntity<TransactionResponseDTO> create(@RequestBody @Valid TransactionRequestDTO transaction) {
         TransactionResponseDTO created = service.create(transaction);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<TransactionResponseDTO>> getTransactionsByCpf(@RequestParam("cpf") String cpf) {
+    public ResponseEntity<List<TransactionResponseDTO>> getTransactionsByCpf(@RequestParam("cpf") @ValidCpf String cpf) {
         List<TransactionResponseDTO> transactions = service.getTransactionsByCpf(cpf);
 
         return new ResponseEntity<>(transactions, HttpStatus.OK);
