@@ -3,6 +3,7 @@ package com.davisiqueira.fraud_guard.config;
 import com.davisiqueira.fraud_guard.security.UserAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,11 +26,6 @@ public class SecurityConfiguration {
 
     public static final String[] ENDPOINTS_WITH_NO_AUTHENTICATION = {
             "/users/login",
-            "/users"
-    };
-
-    public static final String[] ENDPOINTS_ADMIN = {
-            "/users"
     };
 
     @Bean
@@ -37,8 +33,12 @@ public class SecurityConfiguration {
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(http -> http.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        // Allows unauthenticated POST requests to /users.
+                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
                         .requestMatchers(ENDPOINTS_WITH_NO_AUTHENTICATION).permitAll()
-                        .requestMatchers(ENDPOINTS_ADMIN).hasRole("ADMIN")
+                        // Requires ROLE_ADMIN for any request to /users or /users/** that didn't match earlier rules.
+                        // Note: only POST /users (exact) is public; POST /users/** still requires ADMIN.
+                        .requestMatchers("/users", "/users/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 // Registers `UserAuthenticationFilter` to run before `UsernamePasswordAuthenticationFilter` in the filter chain.
