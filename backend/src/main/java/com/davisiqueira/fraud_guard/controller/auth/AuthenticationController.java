@@ -1,0 +1,34 @@
+package com.davisiqueira.fraud_guard.controller.auth;
+
+import com.davisiqueira.fraud_guard.dto.auth.CreateUserDTO;
+import com.davisiqueira.fraud_guard.dto.auth.LoginRequestDTO;
+import com.davisiqueira.fraud_guard.dto.auth.LoginResponseDTO;
+import com.davisiqueira.fraud_guard.service.auth.AuthenticationService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("/users")
+public class AuthenticationController {
+    private final AuthenticationService service;
+
+    public AuthenticationController(AuthenticationService service) {
+        this.service = service;
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> createUser(CreateUserDTO user) {
+        service.createUser(user);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDTO> authenticateUser(LoginRequestDTO request) {
+         LoginResponseDTO token = service.authenticateUser(request);
+
+         return new ResponseEntity<>(token, HttpStatus.OK);
+    }
+}
