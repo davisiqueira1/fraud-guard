@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +15,17 @@ import java.util.Date;
 @Service
 public class JwtService {
     @Value("${spring.security.secret}")
-    private static String SECRET;
+    private String SECRET;
 
     @Value("${spring.security.issuer}")
-    private static String ISSUER;
+    private String ISSUER;
 
-    private static final Algorithm algorithm = Algorithm.HMAC256(SECRET);
+    private Algorithm algorithm;
+
+    @PostConstruct
+    public void initService() {
+        this.algorithm = Algorithm.HMAC256(SECRET);
+    }
 
     public String generateToken(UserDetailsImpl user) throws JWTCreationException {
             return JWT.create()
