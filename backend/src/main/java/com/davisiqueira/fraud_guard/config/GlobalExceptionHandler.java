@@ -3,10 +3,11 @@ package com.davisiqueira.fraud_guard.config;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.davisiqueira.fraud_guard.exception.ApiErrorResponse;
+import com.davisiqueira.fraud_guard.exception.MissingCredentialsException;
+import com.davisiqueira.fraud_guard.exception.UserNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
-import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -71,7 +71,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(JWTVerificationException.class)
-    public ResponseEntity<ApiErrorResponse> handleJwtVerification(RuntimeException e, HttpServletRequest request) {
+    public ResponseEntity<ApiErrorResponse> handleJwtVerification(JWTVerificationException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.UNAUTHORIZED;
 
         Map<String, String> errors = Map.ofEntries(
@@ -84,7 +84,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(JWTCreationException.class)
-    public ResponseEntity<ApiErrorResponse> handleJwtCreation(RuntimeException e, HttpServletRequest request) {
+    public ResponseEntity<ApiErrorResponse> handleJwtCreation(JWTVerificationException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 
         Map<String, String> errors = Map.ofEntries(
@@ -92,6 +92,32 @@ public class GlobalExceptionHandler {
         );
 
         ApiErrorResponse response = buildResponse("Failed to generate JWT token", request, status, errors);
+
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ExceptionHandler(MissingCredentialsException.class)
+    public ResponseEntity<ApiErrorResponse> handleMissingCredentials(MissingCredentialsException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+
+        Map<String, String> errors = Map.ofEntries(
+                Map.entry(e.getClass().getSimpleName(), e.getMessage())
+        );
+
+        ApiErrorResponse response = buildResponse("Failed to authenticate user", request, status, errors);
+
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleUserNotFound(UserNotFoundException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+
+        Map<String, String> errors = Map.ofEntries(
+                Map.entry(e.getClass().getSimpleName(), e.getMessage())
+        );
+
+        ApiErrorResponse response = buildResponse("User not found with the provided credentials", request, status, errors);
 
         return new ResponseEntity<>(response, status);
     }

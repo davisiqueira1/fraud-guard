@@ -1,6 +1,8 @@
 package com.davisiqueira.fraud_guard.security;
 
 import com.davisiqueira.fraud_guard.config.SecurityConfiguration;
+import com.davisiqueira.fraud_guard.exception.MissingCredentialsException;
+import com.davisiqueira.fraud_guard.exception.UserNotFoundException;
 import com.davisiqueira.fraud_guard.model.UserModel;
 import com.davisiqueira.fraud_guard.repository.UserRepository;
 import com.davisiqueira.fraud_guard.service.user.JwtService;
@@ -9,6 +11,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,7 +32,7 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, MissingCredentialsException, UserNotFoundException {
         if (endpointIsPublic(request)) {
             filterChain.doFilter(request, response);
             return;
@@ -37,12 +40,12 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
 
         String token = recoveryToken(request);
         if (token == null) {
-            throw new RuntimeException("Authorization token was not found.");
+            throw new BadCredentialsException("Authorization token was not found.");
         }
 
         String username = jwtService.getSubjectFromToken(token);
         UserModel user = userRepository.findByEmail(username)
-                .orElseThrow(() -> new RuntimeException("Invalid username as token subject"));
+                .orElseThrow(() -> new UserNotFoundException("User associated with authorization token was not found."));
 
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
         Authentication authentication = new UsernamePasswordAuthenticationToken(
