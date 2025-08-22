@@ -38,7 +38,7 @@ public class SecurityConfiguration {
                         .requestMatchers(ENDPOINTS_WITH_NO_AUTHENTICATION).permitAll()
                         // Requires ROLE_ADMIN for any request to /users or /users/** that didn't match earlier rules.
                         // Note: only POST /users (exact) is public; POST /users/** still requires ADMIN.
-                        .requestMatchers("/users", "/users/**").hasRole("ADMIN")
+                        .requestMatchers("/users", "/users/**").hasRole("ADMINISTRATOR")
                         .anyRequest().authenticated()
                 )
                 // Registers `UserAuthenticationFilter` to run before `UsernamePasswordAuthenticationFilter` in the filter chain.
