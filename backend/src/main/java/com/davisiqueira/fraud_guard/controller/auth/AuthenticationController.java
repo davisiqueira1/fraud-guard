@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -20,13 +21,13 @@ public class AuthenticationController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createUser(CreateUserDTO user) {
+    public ResponseEntity<Void> createUser(@RequestBody CreateUserDTO user) {
         service.createUser(user);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> authenticateUser(LoginRequestDTO request) {
+    public ResponseEntity<LoginResponseDTO> authenticateUser(@RequestBody LoginRequestDTO request) {
          LoginResponseDTO token = service.authenticateUser(request);
 
          return new ResponseEntity<>(token, HttpStatus.OK);
