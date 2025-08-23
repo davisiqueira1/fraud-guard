@@ -30,6 +30,10 @@ public class FraudDetectionService {
 
         List<TransactionModel> transactions = repository.getRandomSample(SAMPLE_SIZE);
 
+        if (transactions.isEmpty()) {
+            return false;
+        }
+
         if (isHighFrequency()) {
             score += 10;
         }
@@ -52,6 +56,10 @@ public class FraudDetectionService {
     }
 
     private boolean isOutlierValue(List<TransactionModel> transactions, TransactionModel transaction) {
+        if (transactions.isEmpty()) {
+            return false;
+        }
+
         List<BigDecimal> values = transactions
                 .stream()
                 .map(TransactionModel::getValue)

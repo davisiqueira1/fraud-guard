@@ -14,7 +14,7 @@ public final class StatisticalUtils {
     public static TransactionsStatisticsDTO describeValues(List<BigDecimal> values) {
         final BigDecimal average = calculateAverage(values);
         final BigDecimal variance = calculateVariance(values, average);
-        final BigDecimal standardDeviation = calculateStandardDeviation(values);
+        final BigDecimal standardDeviation = calculateStandardDeviation(variance);
         final BigDecimal minimum = getMinValue(values);
         final BigDecimal maximum = getMaxValue(values);
         final long count = values.size();
@@ -53,7 +53,7 @@ public final class StatisticalUtils {
     }
 
     private static BigDecimal calculateVariance(List<BigDecimal> values, BigDecimal average) {
-        if (values == null || values.isEmpty() || Objects.equals(average, BigDecimal.ZERO)) {
+        if (values == null || values.size() <= 1 || Objects.equals(average, BigDecimal.ZERO)) {
             return BigDecimal.ZERO;
         }
 
