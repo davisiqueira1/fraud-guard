@@ -4,6 +4,7 @@ import com.davisiqueira.fraud_guard.dto.auth.CreateUserDTO;
 import com.davisiqueira.fraud_guard.dto.auth.LoginRequestDTO;
 import com.davisiqueira.fraud_guard.dto.auth.LoginResponseDTO;
 import com.davisiqueira.fraud_guard.service.auth.AuthenticationService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,13 +22,13 @@ public class AuthenticationController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createUser(@RequestBody CreateUserDTO user) {
+    public ResponseEntity<Void> createUser(@RequestBody @Valid CreateUserDTO user) {
         service.createUser(user);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> authenticateUser(@RequestBody LoginRequestDTO request) {
+    public ResponseEntity<LoginResponseDTO> authenticateUser(@RequestBody @Valid LoginRequestDTO request) {
          LoginResponseDTO token = service.authenticateUser(request);
 
          return new ResponseEntity<>(token, HttpStatus.OK);
