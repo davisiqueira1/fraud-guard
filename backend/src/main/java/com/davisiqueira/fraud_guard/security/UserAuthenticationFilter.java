@@ -38,7 +38,7 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String username = jwtService.getSubjectFromToken(token);
-        UserModel user = userRepository.findByEmail(username)
+        UserModel user = userRepository.findWithRolesByEmail(username)
                 .orElseThrow(() -> new UserNotFoundException("User associated with authorization token was not found."));
 
         UserDetailsImpl userDetails = new UserDetailsImpl(user);

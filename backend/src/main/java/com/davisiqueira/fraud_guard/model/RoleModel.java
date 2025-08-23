@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "roles")
 @Builder
@@ -19,4 +22,7 @@ public class RoleModel {
 
     @Enumerated(EnumType.STRING)
     private RoleName name;
+
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+    private Set<UserModel> users = new HashSet<>();
 }

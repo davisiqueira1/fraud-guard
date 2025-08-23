@@ -14,7 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Set;
 
 @Service
 public class AuthenticationService {
@@ -45,7 +45,7 @@ public class AuthenticationService {
         UserModel newUser = UserModel.builder()
                 .email(user.email())
                 .password(securityConfiguration.passwordEncoder().encode(user.password()))
-                .roles(List.of(RoleModel.builder().name(user.role()).build()))
+                .roles(Set.of(RoleModel.builder().name(user.role()).build()))
                 .build();
 
         userRepository.save(newUser);
