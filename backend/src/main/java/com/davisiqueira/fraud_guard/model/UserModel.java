@@ -31,4 +31,12 @@ public class UserModel {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<RoleModel> roles = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "users_transactions",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "transaction_id")
+    )
+    private Set<TransactionModel> transactions = new HashSet<>();
 }

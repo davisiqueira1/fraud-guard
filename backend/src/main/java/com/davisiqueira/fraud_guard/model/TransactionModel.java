@@ -5,6 +5,8 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "transactions")
@@ -33,4 +35,7 @@ public class TransactionModel {
 
     @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT false")
     private Boolean suspect = false;
+
+    @ManyToMany(mappedBy = "transactions", fetch = FetchType.LAZY)
+    private Set<UserModel> users = new HashSet<>();
 }
