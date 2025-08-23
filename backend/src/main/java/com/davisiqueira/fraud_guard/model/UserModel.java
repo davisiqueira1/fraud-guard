@@ -32,18 +32,13 @@ public class UserModel {
     )
     private Set<RoleModel> roles = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "users_transactions",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "transaction_id")
-    )
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<TransactionModel> transactions = new HashSet<>();
 
     public void addTransaction(TransactionModel transaction) {
         transactions.add(transaction);
 
         // In-memory consistency.
-        transaction.getUsers().add(this);
+        transaction.setUser(this);
     }
 }

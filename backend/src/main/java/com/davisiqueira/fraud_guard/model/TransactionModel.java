@@ -36,13 +36,7 @@ public class TransactionModel {
     @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT false")
     private Boolean suspect = false;
 
-    @ManyToMany(mappedBy = "transactions", fetch = FetchType.LAZY)
-    private Set<UserModel> users = new HashSet<>();
-
-    public void addUser(UserModel user) {
-        users.add(user);
-
-        // In-memory consistency.
-        user.getTransactions().add(this);
-    }
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserModel user;
 }

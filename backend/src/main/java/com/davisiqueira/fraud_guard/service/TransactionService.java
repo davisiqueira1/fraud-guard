@@ -44,7 +44,7 @@ public class TransactionService {
             // Send async message to SQS
         }
 
-        transaction.addUser(user);
+        transaction.setUser(user);
 
         return mapper.toResponseDTO(transactionRepository.save(transaction));
     }
