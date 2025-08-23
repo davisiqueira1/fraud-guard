@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<TransactionModel, Long> {
-    List<TransactionModel> findAllByCpf(String cpf);
+    List<TransactionModel> findAllByUserId(Long id);
 
     @Query(value = "SELECT * FROM transactions t WHERE t.suspect = false ORDER BY RANDOM() LIMIT :limit;", nativeQuery = true)
     List<TransactionModel> getRandomSample(@Param("limit") int limit);

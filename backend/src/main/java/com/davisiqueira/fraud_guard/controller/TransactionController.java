@@ -34,8 +34,8 @@ public class TransactionController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TransactionResponseDTO>> getTransactionsByCpf(@RequestParam("cpf") @ValidCpf String cpf) {
-        List<TransactionResponseDTO> transactions = service.getTransactionsByCpf(cpf);
+    public ResponseEntity<List<TransactionResponseDTO>> getTransactionsByUser() {
+        List<TransactionResponseDTO> transactions = service.getTransactionsByUserId(authenticatedUser.get().getUser().getId());
 
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }

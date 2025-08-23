@@ -49,8 +49,8 @@ public class TransactionService {
         return mapper.toResponseDTO(transactionRepository.save(transaction));
     }
 
-    public List<TransactionResponseDTO> getTransactionsByCpf(String cpf) {
-        List<TransactionModel> transactions = transactionRepository.findAllByCpf(cpf);
+    public List<TransactionResponseDTO> getTransactionsByUserId(Long userId) {
+        List<TransactionModel> transactions = transactionRepository.findAllByUserId(userId);
 
         return transactions.stream().map(mapper::toResponseDTO).toList();
     }
