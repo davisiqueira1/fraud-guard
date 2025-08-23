@@ -39,4 +39,11 @@ public class UserModel {
             inverseJoinColumns = @JoinColumn(name = "transaction_id")
     )
     private Set<TransactionModel> transactions = new HashSet<>();
+
+    public void addTransaction(TransactionModel transaction) {
+        transactions.add(transaction);
+
+        // In-memory consistency.
+        transaction.getUsers().add(this);
+    }
 }

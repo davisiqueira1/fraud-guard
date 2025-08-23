@@ -38,4 +38,11 @@ public class TransactionModel {
 
     @ManyToMany(mappedBy = "transactions", fetch = FetchType.LAZY)
     private Set<UserModel> users = new HashSet<>();
+
+    public void addUser(UserModel user) {
+        users.add(user);
+
+        // In-memory consistency.
+        user.getTransactions().add(this);
+    }
 }
