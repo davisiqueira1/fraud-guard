@@ -44,7 +44,7 @@ public class TransactionAdminController {
 
     @GetMapping("/statistics")
     public ResponseEntity<TransactionsStatisticsDTO> getTransactionsStats(@PathVariable Long userId) {
-        TransactionsStatisticsDTO stats = service.getTransactionsStats();
+        TransactionsStatisticsDTO stats = service.getTransactionsStats(userId);
 
         return new ResponseEntity<>(stats, HttpStatus.OK);
     }

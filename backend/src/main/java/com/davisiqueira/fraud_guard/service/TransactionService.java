@@ -71,8 +71,8 @@ public class TransactionService {
         return transactions.stream().map(mapper::toResponseDTO).toList();
     }
 
-    public TransactionsStatisticsDTO getTransactionsStats() {
-        List<BigDecimal> values = transactionRepository.findAll()
+    public TransactionsStatisticsDTO getTransactionsStats(Long userId) {
+        List<BigDecimal> values = transactionRepository.findAllByUserId(userId)
                 .stream()
                 .map(TransactionModel::getValue)
                 .toList();

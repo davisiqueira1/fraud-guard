@@ -40,8 +40,8 @@ public class TransactionUserController {
     }
 
     @GetMapping("/statistics")
-    public ResponseEntity<TransactionsStatisticsDTO> getTransactionsStats() {
-        TransactionsStatisticsDTO stats = service.getTransactionsStats();
+    public ResponseEntity<TransactionsStatisticsDTO> getTransactionsStatsByUser() {
+        TransactionsStatisticsDTO stats = service.getTransactionsStats(authenticatedUser.get().getUser().getId());
 
         return new ResponseEntity<>(stats, HttpStatus.OK);
     }
