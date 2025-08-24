@@ -20,4 +20,6 @@ public interface TransactionRepository extends JpaRepository<TransactionModel, L
     int countTransactionSince(@Param("date") LocalDateTime date);
 
     List<TransactionModel> findAllBySuspect(Boolean suspect);
+
+    List<TransactionModel> findAllBySuspectAndUserId(Boolean suspect, Long id);
 }

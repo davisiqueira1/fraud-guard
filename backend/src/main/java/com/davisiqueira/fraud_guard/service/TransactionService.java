@@ -65,8 +65,8 @@ public class TransactionService {
         return mapper.toResponseDTO(transaction.get());
     }
 
-    public List<TransactionResponseDTO> getSuspectTransactions() {
-        List<TransactionModel> transactions = transactionRepository.findAllBySuspect(true);
+    public List<TransactionResponseDTO> getSuspectTransactions(Long userId) {
+        List<TransactionModel> transactions = transactionRepository.findAllBySuspectAndUserId(true, userId);
 
         return transactions.stream().map(mapper::toResponseDTO).toList();
     }

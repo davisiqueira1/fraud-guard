@@ -37,7 +37,7 @@ public class TransactionAdminController {
 
     @GetMapping("/suspect")
     public ResponseEntity<List<TransactionResponseDTO>> getSuspectTransactions(@PathVariable Long userId) {
-        List<TransactionResponseDTO> suspectTransactions = service.getSuspectTransactions();
+        List<TransactionResponseDTO> suspectTransactions = service.getSuspectTransactions(userId);
 
         return new ResponseEntity<>(suspectTransactions, HttpStatus.OK);
     }
