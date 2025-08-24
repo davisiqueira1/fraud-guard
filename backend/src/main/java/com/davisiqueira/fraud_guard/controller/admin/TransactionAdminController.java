@@ -28,13 +28,6 @@ public class TransactionAdminController {
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<TransactionResponseDTO> getTransactionByID(@PathVariable Long userId, @PathVariable Long id) throws Exception {
-        TransactionResponseDTO transaction = service.getTransactionById(id);
-
-        return new ResponseEntity<>(transaction, HttpStatus.OK);
-    }
-
     @GetMapping("/suspect")
     public ResponseEntity<List<TransactionResponseDTO>> getSuspectTransactions(@PathVariable Long userId) {
         List<TransactionResponseDTO> suspectTransactions = service.getSuspectTransactions(userId);

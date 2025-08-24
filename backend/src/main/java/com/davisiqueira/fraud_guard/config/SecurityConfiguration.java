@@ -36,9 +36,10 @@ public class SecurityConfiguration {
                         // Allows unauthenticated POST requests to /users.
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                         .requestMatchers(ENDPOINTS_WITH_NO_AUTHENTICATION).permitAll()
-                        // Requires ROLE_ADMIN for any request to /users or /users/** that didn't match earlier rules.
-                        // Note: only POST /users (exact) is public; POST /users/** still requires ADMIN.
+                        // Requires ROLE_ADMIN for any request to /api/users or /api/users/** that didn't match earlier rules.
+                        // Note: only POST /api/users (exact) is public; POST /api/users/** still requires ADMIN.
                         .requestMatchers("/api/users", "/api/users/**").hasRole("ADMINISTRATOR")
+                        .requestMatchers("/api/admin", "/api/admin/**").hasRole("ADMINISTRATOR")
                         .anyRequest().authenticated()
                 )
                 // Registers `UserAuthenticationFilter` to run before `UsernamePasswordAuthenticationFilter` in the filter chain.
