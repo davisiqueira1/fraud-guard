@@ -25,7 +25,7 @@ public class SecurityConfiguration {
     }
 
     public static final String[] ENDPOINTS_WITH_NO_AUTHENTICATION = {
-            "/users/login",
+            "/api/users/login",
     };
 
     @Bean
@@ -34,11 +34,11 @@ public class SecurityConfiguration {
                 .sessionManagement(http -> http.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         // Allows unauthenticated POST requests to /users.
-                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                         .requestMatchers(ENDPOINTS_WITH_NO_AUTHENTICATION).permitAll()
                         // Requires ROLE_ADMIN for any request to /users or /users/** that didn't match earlier rules.
                         // Note: only POST /users (exact) is public; POST /users/** still requires ADMIN.
-                        .requestMatchers("/users", "/users/**").hasRole("ADMINISTRATOR")
+                        .requestMatchers("/api/users", "/api/users/**").hasRole("ADMINISTRATOR")
                         .anyRequest().authenticated()
                 )
                 // Registers `UserAuthenticationFilter` to run before `UsernamePasswordAuthenticationFilter` in the filter chain.
