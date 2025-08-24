@@ -3,6 +3,7 @@ package com.davisiqueira.fraud_guard.service;
 import com.davisiqueira.fraud_guard.dto.transaction.TransactionRequestDTO;
 import com.davisiqueira.fraud_guard.dto.transaction.TransactionResponseDTO;
 import com.davisiqueira.fraud_guard.dto.transaction.TransactionsStatisticsDTO;
+import com.davisiqueira.fraud_guard.exception.TransactionNotFoundException;
 import com.davisiqueira.fraud_guard.exception.UserNotFoundException;
 import com.davisiqueira.fraud_guard.mapper.TransactionMapper;
 import com.davisiqueira.fraud_guard.model.TransactionModel;
@@ -55,11 +56,11 @@ public class TransactionService {
         return transactions.stream().map(mapper::toResponseDTO).toList();
     }
 
-    public TransactionResponseDTO getTransactionById(Long id) throws Exception {
+    public TransactionResponseDTO getTransactionById(Long id) {
         Optional<TransactionModel> transaction = transactionRepository.findById(id);
 
         if (transaction.isEmpty()) {
-            throw new Exception("Transaction with id :: " + id + " not found");
+            throw new TransactionNotFoundException("Transaction with id :: " + id + " not found");
         }
 
         return mapper.toResponseDTO(transaction.get());

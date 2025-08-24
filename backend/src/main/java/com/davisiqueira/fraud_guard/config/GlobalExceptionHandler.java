@@ -4,6 +4,7 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.davisiqueira.fraud_guard.exception.ApiErrorResponse;
 import com.davisiqueira.fraud_guard.exception.MissingCredentialsException;
+import com.davisiqueira.fraud_guard.exception.TransactionNotFoundException;
 import com.davisiqueira.fraud_guard.exception.UserNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
@@ -118,6 +119,19 @@ public class GlobalExceptionHandler {
         );
 
         ApiErrorResponse response = buildResponse("User not found with the provided credentials", request, status, errors);
+
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ExceptionHandler(TransactionNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleTransactionNotFound(TransactionNotFoundException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+
+        Map<String, String> errors = Map.ofEntries(
+                Map.entry(e.getClass().getSimpleName(), e.getMessage())
+        );
+
+        ApiErrorResponse response = buildResponse("Transaction not found with the provided identification", request, status, errors);
 
         return new ResponseEntity<>(response, status);
     }

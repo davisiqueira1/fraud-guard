@@ -19,7 +19,7 @@ public class TransactionAdminGlobalController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TransactionResponseDTO> getTransactionById(@PathVariable Long id) throws Exception {
+    public ResponseEntity<TransactionResponseDTO> getTransactionById(@PathVariable Long id) {
         TransactionResponseDTO transaction = service.getTransactionById(id);
 
         return new ResponseEntity<>(transaction, HttpStatus.OK);
