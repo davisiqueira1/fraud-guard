@@ -33,7 +33,11 @@ public class TransactionServiceTests {
     @Mock private FraudDetectionService fraudService;
     @Mock private UserRepository userRepository;
 
-    @Captor ArgumentCaptor<TransactionModel> txCaptor;
+    @Captor
+    ArgumentCaptor<TransactionModel> savedCaptor;
+
+    @Captor
+    ArgumentCaptor<TransactionModel> returnCaptor;
 
     @InjectMocks
     private TransactionService service;
@@ -76,14 +80,52 @@ public class TransactionServiceTests {
             verify(mapper).toModel(dto);
             verify(fraudService).isSuspect(transaction);
 
-            verify(transactionRepository).save(txCaptor.capture());
-            TransactionModel captured = txCaptor.getValue();
+            verify(transactionRepository).save(savedCaptor.capture());
+            TransactionModel captured = savedCaptor.getValue();
             assertTrue(captured.getSuspect());
             assertSame(user, captured.getUser());
             assertNotNull(captured.getDate());
 
             verify(mapper).toResponseDTO(saved);
             assertEquals(transactionId, result.id());
+        }
+
+        @Test
+        void shouldSaveNonSuspect_whenFraudIsFalse() {
+            final Long userId = 1L;
+            final Long transactionId = 2L;
+
+            TransactionRequestDTO requestDto = new TransactionRequestDTO(null, null, null, null);
+            UserModel user = new UserModel(userId, null, null, null, null);
+            TransactionModel mapped = new TransactionModel();
+            TransactionModel saved = new TransactionModel();
+            saved.setId(2L);
+            saved.setUser(user);
+            TransactionResponseDTO output = new TransactionResponseDTO(transactionId, null, null, null, null, null);
+
+            when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+            when(mapper.toModel(requestDto)).thenReturn(mapped);
+            when(fraudService.isSuspect(mapped)).thenReturn(false);
+            when(transactionRepository.save(any(TransactionModel.class))).thenReturn(saved);
+            when(mapper.toResponseDTO(saved)).thenReturn(output);
+
+            TransactionResponseDTO response = service.create(requestDto, userId);
+
+            verify(userRepository).findById(userId);
+            verify(mapper).toModel(requestDto);
+            verify(fraudService).isSuspect(mapped);
+
+            verify(transactionRepository).save(savedCaptor.capture());
+            TransactionModel capturedOnSave = savedCaptor.getValue();
+            assertNotEquals(Boolean.TRUE, capturedOnSave.getSuspect());
+            assertNotNull(capturedOnSave.getDate());
+            assertSame(user, capturedOnSave.getUser());
+
+            verify(mapper).toResponseDTO(returnCaptor.capture());
+            TransactionModel captureOnReturn = returnCaptor.getValue();
+            assertEquals(transactionId, captureOnReturn.getId());
+
+            assertEquals(transactionId, response.id());
         }
     }
 
