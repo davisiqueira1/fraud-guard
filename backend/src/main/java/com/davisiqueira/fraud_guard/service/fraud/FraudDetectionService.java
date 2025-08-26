@@ -82,7 +82,7 @@ public class FraudDetectionService {
 
         int comparison = value.compareTo(threshold);
 
-        return comparison >= 0;
+        return comparison > 0;
     }
 
     private boolean isOutOfAllowedRadius(List<TransactionModel> transactions, TransactionModel transaction) {
