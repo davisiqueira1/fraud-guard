@@ -16,7 +16,8 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 public class UserModel {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true)

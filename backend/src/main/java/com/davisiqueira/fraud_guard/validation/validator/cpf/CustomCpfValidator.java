@@ -7,7 +7,7 @@ public class CustomCpfValidator implements ConstraintValidator<ValidCpf, String>
 
     @Override
     public boolean isValid(String cpf, ConstraintValidatorContext constraintValidatorContext) {
-        if(cpf == null || !cpf.matches("\\d{11}")) {
+        if (cpf == null || !cpf.matches("\\d{11}")) {
             return false;
         }
 

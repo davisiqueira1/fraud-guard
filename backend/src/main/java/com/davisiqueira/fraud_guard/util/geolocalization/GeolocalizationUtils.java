@@ -3,7 +3,8 @@ package com.davisiqueira.fraud_guard.util.geolocalization;
 import java.util.List;
 
 public final class GeolocalizationUtils {
-    private GeolocalizationUtils() {}
+    private GeolocalizationUtils() {
+    }
 
     private static final double EARTH_RADIUS_IN_KM = 6371008.8;
 

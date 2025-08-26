@@ -28,21 +28,25 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class TransactionServiceTests {
-    @Mock private TransactionRepository transactionRepository;
-    @Mock private TransactionMapper mapper = Mappers.getMapper(TransactionMapper.class);
-    @Mock private FraudDetectionService fraudService;
-    @Mock private UserRepository userRepository;
+    @Mock
+    private TransactionRepository transactionRepository;
+    @Mock
+    private TransactionMapper mapper = Mappers.getMapper(TransactionMapper.class);
+    @Mock
+    private FraudDetectionService fraudService;
+    @Mock
+    private UserRepository userRepository;
 
     @Captor
     ArgumentCaptor<TransactionModel> savedCaptor;
-
     @Captor
     ArgumentCaptor<TransactionModel> returnCaptor;
 
     @InjectMocks
     private TransactionService service;
 
-    @Nested class Create {
+    @Nested
+    class Create {
         @Test
         void shouldThrowException_whenUserIdNotFound() {
             final Long id = -1L;
@@ -129,7 +133,8 @@ public class TransactionServiceTests {
         }
     }
 
-    @Nested class FindById {
+    @Nested
+    class FindById {
         @Test
         void shouldReturnTransaction_whenIdExists() {
             final Long id = 123L;

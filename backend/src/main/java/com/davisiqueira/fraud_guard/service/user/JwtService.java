@@ -28,12 +28,12 @@ public class JwtService {
     }
 
     public String generateToken(UserDetailsImpl user) throws JWTCreationException {
-            return JWT.create()
-                    .withIssuer(ISSUER)
-                    .withIssuedAt(issuedAt())
-                    .withExpiresAt(expiresAt())
-                    .withSubject(user.getUsername())
-                    .sign(algorithm);
+        return JWT.create()
+                .withIssuer(ISSUER)
+                .withIssuedAt(issuedAt())
+                .withExpiresAt(expiresAt())
+                .withSubject(user.getUsername())
+                .sign(algorithm);
     }
 
     public String getSubjectFromToken(String token) throws JWTVerificationException {

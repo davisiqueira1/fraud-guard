@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Objects;
 
 public final class StatisticalUtils {
-    private StatisticalUtils() {}
+    private StatisticalUtils() {
+    }
 
     public static TransactionsStatisticsDTO describeValues(List<BigDecimal> values) {
         final BigDecimal average = calculateAverage(values);

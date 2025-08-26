@@ -1,6 +1,5 @@
 package com.davisiqueira.fraud_guard.security;
 
-import com.davisiqueira.fraud_guard.exception.MissingCredentialsException;
 import com.davisiqueira.fraud_guard.exception.UserNotFoundException;
 import com.davisiqueira.fraud_guard.model.UserModel;
 import com.davisiqueira.fraud_guard.repository.UserRepository;

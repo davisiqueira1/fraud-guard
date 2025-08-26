@@ -17,7 +17,8 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 public class RoleModel {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Enumerated(EnumType.STRING)
