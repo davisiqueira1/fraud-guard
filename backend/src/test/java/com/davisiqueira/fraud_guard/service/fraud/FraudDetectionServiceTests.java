@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -41,11 +42,8 @@ public class FraudDetectionServiceTests {
     }
 
     @Test
-    void shouldReturnFalse_whenScoreIsBelowThreshold() {
-        List<TransactionModel> sample = new ArrayList<>();
-        for (int i = 0; i < SAMPLE_SIZE; i++) {
-            sample.add(generateDefaultTransaction());
-        }
+    void shouldReturnFalse_whenScoreBelowThreshold() {
+        List<TransactionModel> sample = generateDefaultSample();
 
         TransactionModel transaction = generateDefaultTransaction();
 
@@ -59,6 +57,43 @@ public class FraudDetectionServiceTests {
         assertFalse(result);
     }
 
+    @Test
+    void shouldReturnTrue_whenScoreEqualsThreshold() {
+        List<TransactionModel> sample = generateDefaultSample();
+
+        TransactionModel transaction = generateDefaultTransaction();
+        // Outlier value.
+        transaction.setValue(BigDecimal.valueOf(Long.MAX_VALUE));
+
+        when(repository.getRandomSample(SAMPLE_SIZE)).thenReturn(sample);
+        when(repository.countTransactionSince(any(LocalDateTime.class))).thenReturn(0);
+
+        boolean result = service.isSuspect(transaction);
+
+        verify(repository).getRandomSample(SAMPLE_SIZE);
+        verify(repository).countTransactionSince(any(LocalDateTime.class));
+        assertTrue(result);
+    }
+
+    @Test
+    void shouldReturnTrue_whenScoreAboveThreshold() {
+        List<TransactionModel> sample = generateDefaultSample();
+
+        TransactionModel transaction = generateDefaultTransaction();
+        // Outlier value.
+        transaction.setValue(BigDecimal.valueOf(Long.MAX_VALUE));
+
+        when(repository.getRandomSample(SAMPLE_SIZE)).thenReturn(sample);
+        // High frequency.
+        when(repository.countTransactionSince(any(LocalDateTime.class))).thenReturn(Integer.MAX_VALUE);
+
+        boolean result = service.isSuspect(transaction);
+
+        verify(repository).getRandomSample(SAMPLE_SIZE);
+        verify(repository).countTransactionSince(any(LocalDateTime.class));
+        assertTrue(result);
+    }
+
     private TransactionModel generateDefaultTransaction() {
         return new TransactionModel(
                 null,
@@ -70,6 +105,15 @@ public class FraudDetectionServiceTests {
                 false,
                 null
         );
+    }
+
+    private List<TransactionModel> generateDefaultSample() {
+        List<TransactionModel> sample = new ArrayList<>();
+        for (int i = 0; i < SAMPLE_SIZE; i++) {
+            sample.add(generateDefaultTransaction());
+        }
+
+        return sample;
     }
 
 }
