@@ -49,6 +49,7 @@ public final class StatisticalUtils {
 
         return values
                 .stream()
+                .filter(Objects::nonNull)
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
                 .divide(BigDecimal.valueOf(values.size()), RoundingMode.HALF_UP);
     }
@@ -60,6 +61,7 @@ public final class StatisticalUtils {
 
         return values
                 .stream()
+                .filter(Objects::nonNull)
                 .map(value -> value.subtract(average).pow(2))
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
                 .divide(BigDecimal.valueOf(values.size() - 1), RoundingMode.HALF_UP);
