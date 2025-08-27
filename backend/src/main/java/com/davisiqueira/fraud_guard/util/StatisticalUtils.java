@@ -54,7 +54,7 @@ public final class StatisticalUtils {
     }
 
     private static BigDecimal calculateVariance(List<BigDecimal> values, BigDecimal average) {
-        if (values == null || values.size() <= 1 || Objects.equals(average, BigDecimal.ZERO)) {
+        if (values == null || values.size() < 2) {
             return BigDecimal.ZERO;
         }
 
