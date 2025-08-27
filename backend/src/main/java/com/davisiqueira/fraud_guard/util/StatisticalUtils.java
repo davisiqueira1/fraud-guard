@@ -18,7 +18,7 @@ public final class StatisticalUtils {
         final BigDecimal standardDeviation = calculateStandardDeviation(variance);
         final BigDecimal minimum = getMinValue(values);
         final BigDecimal maximum = getMaxValue(values);
-        final long count = values.size();
+        final long count = values != null ? values.size() : 0;
 
         return new TransactionsStatisticsDTO(
                 average,
