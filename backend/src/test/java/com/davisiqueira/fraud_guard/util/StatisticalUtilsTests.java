@@ -51,5 +51,50 @@ public class StatisticalUtilsTests {
                 assertEquals(BigDecimal.ZERO, result);
             }
         }
+
+        @Nested
+        class Boundary {
+            @Test
+            void shouldReturnZero_whenValuesIsEmpty() {
+                List<BigDecimal> values = new ArrayList<>();
+
+                BigDecimal result = StatisticalUtils.calculateStandardDeviation(values);
+
+                assertEquals(BigDecimal.ZERO, result);
+            }
+
+            @Test
+            void shouldReturnZero_whenValuesIsNull() {
+                BigDecimal result = StatisticalUtils.calculateStandardDeviation(null);
+
+                assertEquals(BigDecimal.ZERO, result);
+            }
+
+            @Test
+            void shouldIgnoreNullValuesInList() {
+                List<BigDecimal> values = new ArrayList<>() {{
+                    add(null);
+                    add(null);
+                    add(null);
+                }};
+
+                BigDecimal result = StatisticalUtils.calculateStandardDeviation(values);
+
+                assertEquals(BigDecimal.ZERO, result);
+            }
+
+            @Test
+            void shouldReturnZero_whenNonNullValuesSizeIsLessThan2() {
+                List<BigDecimal> values = new ArrayList<>() {{
+                    add(BigDecimal.ZERO);
+                    add(null);
+                }};
+
+                BigDecimal result = StatisticalUtils.calculateStandardDeviation(values);
+
+                assertEquals(BigDecimal.ZERO, result);
+            }
+        }
+
     }
 }
