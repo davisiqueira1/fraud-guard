@@ -1,5 +1,6 @@
 package com.davisiqueira.fraud_guard.util;
 
+import com.davisiqueira.fraud_guard.dto.transaction.TransactionsStatisticsDTO;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -96,5 +97,37 @@ public class StatisticalUtilsTests {
             }
         }
 
+    }
+
+    @Nested
+    class DescribeValues {
+        @Nested
+        class Boundary {
+            @Test
+            void shouldReturnAllZero_whenValuesIsEmpty() {
+                List<BigDecimal> values = new ArrayList<>();
+
+                TransactionsStatisticsDTO result = StatisticalUtils.describeValues(values);
+
+                assertEquals(BigDecimal.ZERO, result.average());
+                assertEquals(BigDecimal.ZERO, result.variance());
+                assertEquals(BigDecimal.ZERO, result.standardDeviation());
+                assertEquals(BigDecimal.ZERO, result.minimum());
+                assertEquals(BigDecimal.ZERO, result.maximum());
+                assertEquals(0, result.count());
+            }
+
+            @Test
+            void shouldReturnAllZero_whenValuesIsNull() {
+                TransactionsStatisticsDTO result = StatisticalUtils.describeValues(null);
+
+                assertEquals(BigDecimal.ZERO, result.average());
+                assertEquals(BigDecimal.ZERO, result.variance());
+                assertEquals(BigDecimal.ZERO, result.standardDeviation());
+                assertEquals(BigDecimal.ZERO, result.minimum());
+                assertEquals(BigDecimal.ZERO, result.maximum());
+                assertEquals(0, result.count());
+            }
+        }
     }
 }
