@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class StatisticalUtilsTests {
     @Nested
@@ -118,8 +119,19 @@ public class StatisticalUtilsTests {
             }
 
             @Test
-            void shouldReturnAllZero_whenValuesIsNull() {
-                TransactionsStatisticsDTO result = StatisticalUtils.describeValues(null);
+            void shouldRaiseNullPointerException_whenValuesIsNull() {
+                assertThrows(NullPointerException.class, () -> StatisticalUtils.describeValues(null));
+            }
+
+            @Test
+            void shouldIgnoreNullValuesInList() {
+                List<BigDecimal> values = new ArrayList<>() {{
+                    add(null);
+                    add(null);
+                    add(null);
+                }};
+
+                TransactionsStatisticsDTO result = StatisticalUtils.describeValues(values);
 
                 assertEquals(BigDecimal.ZERO, result.average());
                 assertEquals(BigDecimal.ZERO, result.variance());
