@@ -1,6 +1,9 @@
 package com.davisiqueira.fraud_guard.util.geolocalization;
 
+import lombok.NonNull;
+
 import java.util.List;
+import java.util.Objects;
 
 public final class GeolocalizationUtils {
     private GeolocalizationUtils() {
@@ -8,8 +11,10 @@ public final class GeolocalizationUtils {
 
     private static final double EARTH_RADIUS_IN_KM = 6371008.8;
 
-    public static boolean isPointNearGroup(Coordinates<Double> point, List<Coordinates<Double>> coordinates, double radius) {
-        Coordinates<Double> center = calculateCenterPoint(coordinates);
+    public static boolean isPointNearGroup(@NonNull Coordinates<Double> point, @NonNull List<Coordinates<Double>> coordinates, double radius) {
+        final List<Coordinates<Double>> filteredCoordinates = coordinates.stream().filter(Objects::nonNull).toList();
+
+        Coordinates<Double> center = calculateCenterPoint(filteredCoordinates);
         return isPointOnRadius(point, center, radius);
     }
 
