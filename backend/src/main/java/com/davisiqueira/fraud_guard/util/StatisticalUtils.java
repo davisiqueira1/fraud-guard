@@ -1,6 +1,7 @@
 package com.davisiqueira.fraud_guard.util;
 
 import com.davisiqueira.fraud_guard.dto.transaction.TransactionsStatisticsDTO;
+import lombok.NonNull;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -12,13 +13,15 @@ public final class StatisticalUtils {
     private StatisticalUtils() {
     }
 
-    public static TransactionsStatisticsDTO describeValues(List<BigDecimal> values) {
-        final BigDecimal average = calculateAverage(values);
-        final BigDecimal variance = calculateVariance(values, average);
+    public static TransactionsStatisticsDTO describeValues(@NonNull List<BigDecimal> values) {
+        final List<BigDecimal> filteredValues = values.stream().filter(Objects::nonNull).toList();
+
+        final BigDecimal average = calculateAverage(filteredValues);
+        final BigDecimal variance = calculateVariance(filteredValues, average);
         final BigDecimal standardDeviation = calculateStandardDeviation(variance);
-        final BigDecimal minimum = getMinValue(values);
-        final BigDecimal maximum = getMaxValue(values);
-        final long count = values != null ? values.size() : 0;
+        final BigDecimal minimum = getMinValue(filteredValues);
+        final BigDecimal maximum = getMaxValue(filteredValues);
+        final long count = filteredValues.size();
 
         return new TransactionsStatisticsDTO(
                 average,
