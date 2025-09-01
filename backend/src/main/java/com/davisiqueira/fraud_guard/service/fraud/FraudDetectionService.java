@@ -28,13 +28,13 @@ public class FraudDetectionService {
     public boolean isSuspect(TransactionModel transaction) {
         int score = 0;
 
-        List<TransactionModel> transactions = repository.getRandomSample(SAMPLE_SIZE);
+        List<TransactionModel> transactions = repository.getRandomSampleFromUser(SAMPLE_SIZE, transaction.getUser().getId());
 
         if (transactions.isEmpty()) {
             return false;
         }
 
-        if (isHighFrequency()) {
+        if (isHighFrequency(transaction.getUser().getId())) {
             score += 10;
         }
 
@@ -49,8 +49,8 @@ public class FraudDetectionService {
         return score >= 50;
     }
 
-    private boolean isHighFrequency() {
-        int countLastFiveMinutes = repository.countTransactionSince(LocalDateTime.now().minusMinutes(FREQUENCY_TIME_WINDOW_MINUTES));
+    private boolean isHighFrequency(Long userId) {
+        int countLastFiveMinutes = repository.countUserTransactionsSince(LocalDateTime.now().minusMinutes(FREQUENCY_TIME_WINDOW_MINUTES), userId);
 
         return countLastFiveMinutes >= MAX_TRANSACTIONS_ALLOWED_IN_WINDOW;
     }

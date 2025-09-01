@@ -1,6 +1,7 @@
 package com.davisiqueira.fraud_guard.repository;
 
 import com.davisiqueira.fraud_guard.model.TransactionModel;
+import com.davisiqueira.fraud_guard.model.UserModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,13 +14,13 @@ import java.util.List;
 public interface TransactionRepository extends JpaRepository<TransactionModel, Long> {
     List<TransactionModel> findAllByUserId(Long id);
 
-    @Query(value = "SELECT * FROM transactions t WHERE t.suspect = false ORDER BY RANDOM() LIMIT :limit;", nativeQuery = true)
-    List<TransactionModel> getRandomSample(@Param("limit") int limit);
+    @Query(value = "SELECT * FROM transactions t WHERE t.suspect = false AND t.user_id = :userId ORDER BY RANDOM() LIMIT :limit;", nativeQuery = true)
+    List<TransactionModel> getRandomSampleFromUser(@Param("limit") int limit, @Param("userId") Long userId);
 
-    @Query(value = "SELECT COUNT(*) FROM transactions t WHERE t.date >= :date", nativeQuery = true)
-    int countTransactionSince(@Param("date") LocalDateTime date);
-
-    List<TransactionModel> findAllBySuspect(Boolean suspect);
+    @Query(value = "SELECT COUNT(*) FROM transactions t WHERE t.date >= :date AND t.user_id = :userId", nativeQuery = true)
+    int countUserTransactionsSince(@Param("date") LocalDateTime date, @Param("userId") Long userId);
 
     List<TransactionModel> findAllBySuspectAndUserId(Boolean suspect, Long id);
+
+    Long user(UserModel user);
 }
