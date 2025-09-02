@@ -12,6 +12,11 @@ data "aws_iam_policy_document" "assume_role" {
   }
 }
 
+resource "aws_iam_role_policy_attachment" "lambda_sqs_managed" {
+  role       = aws_iam_role.lambda_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole"
+}
+
 resource "aws_iam_role" "lambda_role" {
   name               = "lambda-execution-role"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
