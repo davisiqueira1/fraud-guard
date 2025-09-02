@@ -1,3 +1,3 @@
-export const handler = async(event) => {
+exports.handler = async(event) => {
     return { message: "Hello!" };
 }
