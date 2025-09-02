@@ -8,3 +8,8 @@ variable "lambda_timeout_seconds" {
   type        = number
   default     = 3
 }
+
+variable "lambda_name" {
+  description = "Defines the lambda function name."
+  type        = string
+}
