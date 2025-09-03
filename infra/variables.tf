@@ -19,3 +19,8 @@ variable "lambda_batch_size" {
   type        = number
   default     = 10
 }
+
+variable "dynamodb_name" {
+  default = "Defines the dynamodb table name."
+  type    = string
+}
