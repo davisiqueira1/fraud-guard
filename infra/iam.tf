@@ -17,6 +17,22 @@ resource "aws_iam_role_policy_attachment" "lambda_sqs_managed" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole"
 }
 
+data "aws_iam_policy_document" "ddb_put" {
+  statement {
+    effect = "Allow"
+    actions = ["dynamodb:PutItem"]
+    resources = [
+      aws_dynamodb_table.suspect_transaction_table.arn
+    ]
+  }
+}
+
+resource "aws_iam_role_policy" "lambda_ddb_inline" {
+  name   = "fraud-guard-ddb-put"
+  role   = aws_iam_role.lambda_role.id
+  policy = data.aws_iam_policy_document.ddb_put.json
+}
+
 resource "aws_iam_role" "lambda_role" {
   name               = "lambda-execution-role"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
