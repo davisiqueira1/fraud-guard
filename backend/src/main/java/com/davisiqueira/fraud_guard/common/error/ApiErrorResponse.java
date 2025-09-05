@@ -1,4 +1,4 @@
-package com.davisiqueira.fraud_guard.exception;
+package com.davisiqueira.fraud_guard.common.error;
 
 import java.time.LocalDateTime;
 import java.util.Map;

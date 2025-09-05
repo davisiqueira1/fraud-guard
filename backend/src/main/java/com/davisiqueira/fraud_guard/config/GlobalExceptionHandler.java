@@ -2,7 +2,7 @@ package com.davisiqueira.fraud_guard.config;
 
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.davisiqueira.fraud_guard.exception.ApiErrorResponse;
+import com.davisiqueira.fraud_guard.common.error.ApiErrorResponse;
 import com.davisiqueira.fraud_guard.exception.MissingCredentialsException;
 import com.davisiqueira.fraud_guard.exception.TransactionNotFoundException;
 import com.davisiqueira.fraud_guard.exception.UserNotFoundException;
