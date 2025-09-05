@@ -1,5 +1,6 @@
 package com.davisiqueira.fraud_guard.controller.admin;
 
+import com.davisiqueira.fraud_guard.common.response.ApiResponse;
 import com.davisiqueira.fraud_guard.dto.transaction.TransactionResponseDTO;
 import com.davisiqueira.fraud_guard.dto.transaction.TransactionsStatisticsDTO;
 import com.davisiqueira.fraud_guard.service.TransactionService;
@@ -24,23 +25,23 @@ public class TransactionAdminController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TransactionResponseDTO>> getTransactionsByUser(@PathVariable Long userId) {
+    public ResponseEntity<ApiResponse<List<TransactionResponseDTO>>> getTransactionsByUser(@PathVariable Long userId) {
         List<TransactionResponseDTO> transactions = service.getTransactionsByUserId(userId);
 
-        return new ResponseEntity<>(transactions, HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.of(transactions), HttpStatus.OK);
     }
 
     @GetMapping("/suspect")
-    public ResponseEntity<List<TransactionResponseDTO>> getSuspectTransactions(@PathVariable Long userId) {
+    public ResponseEntity<ApiResponse<List<TransactionResponseDTO>>> getSuspectTransactions(@PathVariable Long userId) {
         List<TransactionResponseDTO> suspectTransactions = service.getSuspectTransactions(userId);
 
-        return new ResponseEntity<>(suspectTransactions, HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.of(suspectTransactions), HttpStatus.OK);
     }
 
     @GetMapping("/statistics")
-    public ResponseEntity<TransactionsStatisticsDTO> getTransactionsStats(@PathVariable Long userId) {
+    public ResponseEntity<ApiResponse<TransactionsStatisticsDTO>> getTransactionsStats(@PathVariable Long userId) {
         TransactionsStatisticsDTO stats = service.getTransactionsStats(userId);
 
-        return new ResponseEntity<>(stats, HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.of(stats), HttpStatus.OK);
     }
 }

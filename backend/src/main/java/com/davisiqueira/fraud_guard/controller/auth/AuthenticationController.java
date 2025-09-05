@@ -1,5 +1,6 @@
 package com.davisiqueira.fraud_guard.controller.auth;
 
+import com.davisiqueira.fraud_guard.common.response.ApiResponse;
 import com.davisiqueira.fraud_guard.dto.auth.CreateUserDTO;
 import com.davisiqueira.fraud_guard.dto.auth.LoginRequestDTO;
 import com.davisiqueira.fraud_guard.dto.auth.LoginResponseDTO;
@@ -28,9 +29,9 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> authenticateUser(@RequestBody @Valid LoginRequestDTO request) {
+    public ResponseEntity<ApiResponse<LoginResponseDTO>> authenticateUser(@RequestBody @Valid LoginRequestDTO request) {
         LoginResponseDTO token = service.authenticateUser(request);
 
-        return new ResponseEntity<>(token, HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.of(token), HttpStatus.OK);
     }
 }

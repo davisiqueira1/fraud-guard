@@ -1,5 +1,6 @@
 package com.davisiqueira.fraud_guard.controller.user;
 
+import com.davisiqueira.fraud_guard.common.response.ApiResponse;
 import com.davisiqueira.fraud_guard.dto.transaction.TransactionRequestDTO;
 import com.davisiqueira.fraud_guard.dto.transaction.TransactionResponseDTO;
 import com.davisiqueira.fraud_guard.dto.transaction.TransactionsStatisticsDTO;
@@ -30,22 +31,22 @@ public class TransactionUserController {
     }
 
     @PostMapping
-    public ResponseEntity<TransactionResponseDTO> create(@RequestBody @Valid TransactionRequestDTO transaction) {
+    public ResponseEntity<ApiResponse<TransactionResponseDTO>> create(@RequestBody @Valid TransactionRequestDTO transaction) {
         TransactionResponseDTO created = service.create(transaction, authenticatedUser.get().getUser().getId());
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+        return new ResponseEntity<>(ApiResponse.of(created), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<TransactionResponseDTO>> getTransactionsByUser() {
+    public ResponseEntity<ApiResponse<List<TransactionResponseDTO>>> getTransactionsByUser() {
         List<TransactionResponseDTO> transactions = service.getTransactionsByUserId(authenticatedUser.get().getUser().getId());
 
-        return new ResponseEntity<>(transactions, HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.of(transactions), HttpStatus.OK);
     }
 
     @GetMapping("/statistics")
-    public ResponseEntity<TransactionsStatisticsDTO> getTransactionsStatsByUser() {
+    public ResponseEntity<ApiResponse<TransactionsStatisticsDTO>> getTransactionsStatsByUser() {
         TransactionsStatisticsDTO stats = service.getTransactionsStats(authenticatedUser.get().getUser().getId());
 
-        return new ResponseEntity<>(stats, HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.of(stats), HttpStatus.OK);
     }
 }

@@ -1,5 +1,6 @@
 package com.davisiqueira.fraud_guard.controller.admin;
 
+import com.davisiqueira.fraud_guard.common.response.ApiResponse;
 import com.davisiqueira.fraud_guard.dto.transaction.TransactionResponseDTO;
 import com.davisiqueira.fraud_guard.service.TransactionService;
 import org.springframework.http.HttpStatus;
@@ -19,9 +20,9 @@ public class TransactionAdminGlobalController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TransactionResponseDTO> getTransactionById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<TransactionResponseDTO>> getTransactionById(@PathVariable Long id) {
         TransactionResponseDTO transaction = service.getTransactionById(id);
 
-        return new ResponseEntity<>(transaction, HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.of(transaction), HttpStatus.OK);
     }
 }
