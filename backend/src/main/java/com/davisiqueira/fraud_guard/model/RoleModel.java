@@ -21,6 +21,7 @@ public class RoleModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     @Enumerated(EnumType.STRING)
     private RoleName name;
 
