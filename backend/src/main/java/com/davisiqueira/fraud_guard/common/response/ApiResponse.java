@@ -1,9 +1,7 @@
 package com.davisiqueira.fraud_guard.common.response;
 
-import org.springframework.data.domain.Pageable;
-
-public record ApiResponse<T>(T data, Pageable pageable) {
-    public static <T> ApiResponse<T> of(T data, Pageable pageable) {
+public record ApiResponse<T>(T data, PageInfo pageable) {
+    public static <T> ApiResponse<T> of(T data, PageInfo pageable) {
         return new ApiResponse<>(data, pageable);
     }
 

@@ -1,6 +1,7 @@
 package com.davisiqueira.fraud_guard.controller.admin;
 
 import com.davisiqueira.fraud_guard.common.response.ApiResponse;
+import com.davisiqueira.fraud_guard.common.response.PageInfo;
 import com.davisiqueira.fraud_guard.dto.transaction.TransactionResponseDTO;
 import com.davisiqueira.fraud_guard.dto.transaction.TransactionsStatisticsDTO;
 import com.davisiqueira.fraud_guard.service.TransactionService;
@@ -34,7 +35,7 @@ public class TransactionAdminController {
     ) {
         Page<TransactionResponseDTO> transactions = service.getTransactionsByUserId(userId, page);
 
-        return new ResponseEntity<>(ApiResponse.of(transactions.getContent(), transactions.getPageable()), HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.of(transactions.getContent(), PageInfo.from(transactions)), HttpStatus.OK);
     }
 
     @GetMapping("/suspect")

@@ -1,6 +1,7 @@
 package com.davisiqueira.fraud_guard.controller.user;
 
 import com.davisiqueira.fraud_guard.common.response.ApiResponse;
+import com.davisiqueira.fraud_guard.common.response.PageInfo;
 import com.davisiqueira.fraud_guard.dto.transaction.TransactionRequestDTO;
 import com.davisiqueira.fraud_guard.dto.transaction.TransactionResponseDTO;
 import com.davisiqueira.fraud_guard.dto.transaction.TransactionsStatisticsDTO;
@@ -43,7 +44,7 @@ public class TransactionUserController {
     public ResponseEntity<ApiResponse<List<TransactionResponseDTO>>> getTransactionsByUser(@PageableDefault() Pageable page) {
         Page<TransactionResponseDTO> transactions = service.getTransactionsByUserId(authenticatedUser.get().getUser().getId(), page);
 
-        return new ResponseEntity<>(ApiResponse.of(transactions.getContent(), transactions.getPageable()), HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.of(transactions.getContent(), PageInfo.from(transactions)), HttpStatus.OK);
     }
 
     @GetMapping("/statistics")
