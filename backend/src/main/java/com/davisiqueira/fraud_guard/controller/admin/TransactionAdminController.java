@@ -28,13 +28,13 @@ public class TransactionAdminController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<TransactionResponseDTO>>> getTransactionsByUser(
+    public ResponseEntity<ApiResponse<List<TransactionResponseDTO>>> getTransactionsByUser(
             @PathVariable Long userId,
             @PageableDefault() Pageable page
     ) {
         Page<TransactionResponseDTO> transactions = service.getTransactionsByUserId(userId, page);
 
-        return new ResponseEntity<>(ApiResponse.of(transactions), HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.of(transactions.getContent(), transactions.getPageable()), HttpStatus.OK);
     }
 
     @GetMapping("/suspect")

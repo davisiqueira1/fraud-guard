@@ -1,16 +1,13 @@
 package com.davisiqueira.fraud_guard.common.response;
 
-import lombok.Getter;
+import org.springframework.data.domain.Pageable;
 
-@Getter
-public class ApiResponse<T> {
-    private final T data;
-
-    public ApiResponse(T data) {
-        this.data = data;
+public record ApiResponse<T>(T data, Pageable pageable) {
+    public static <T> ApiResponse<T> of(T data, Pageable pageable) {
+        return new ApiResponse<>(data, pageable);
     }
 
     public static <T> ApiResponse<T> of(T data) {
-        return new ApiResponse<>(data);
+        return new ApiResponse<>(data, null);
     }
 }

@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @Controller
 @Validated
 @RequestMapping("/api/transactions")
@@ -38,10 +40,10 @@ public class TransactionUserController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<TransactionResponseDTO>>> getTransactionsByUser(@PageableDefault() Pageable page) {
+    public ResponseEntity<ApiResponse<List<TransactionResponseDTO>>> getTransactionsByUser(@PageableDefault() Pageable page) {
         Page<TransactionResponseDTO> transactions = service.getTransactionsByUserId(authenticatedUser.get().getUser().getId(), page);
 
-        return new ResponseEntity<>(ApiResponse.of(transactions), HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.of(transactions.getContent(), transactions.getPageable()), HttpStatus.OK);
     }
 
     @GetMapping("/statistics")
