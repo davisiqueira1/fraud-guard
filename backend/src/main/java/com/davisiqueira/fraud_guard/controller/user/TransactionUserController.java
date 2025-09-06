@@ -7,6 +7,9 @@ import com.davisiqueira.fraud_guard.dto.transaction.TransactionsStatisticsDTO;
 import com.davisiqueira.fraud_guard.security.AuthenticatedUser;
 import com.davisiqueira.fraud_guard.service.TransactionService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,8 +18,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
 
 @Controller
 @Validated
@@ -37,8 +38,8 @@ public class TransactionUserController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<TransactionResponseDTO>>> getTransactionsByUser() {
-        List<TransactionResponseDTO> transactions = service.getTransactionsByUserId(authenticatedUser.get().getUser().getId());
+    public ResponseEntity<ApiResponse<Page<TransactionResponseDTO>>> getTransactionsByUser(@PageableDefault() Pageable page) {
+        Page<TransactionResponseDTO> transactions = service.getTransactionsByUserId(authenticatedUser.get().getUser().getId(), page);
 
         return new ResponseEntity<>(ApiResponse.of(transactions), HttpStatus.OK);
     }

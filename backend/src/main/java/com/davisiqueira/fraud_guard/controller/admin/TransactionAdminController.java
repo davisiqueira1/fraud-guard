@@ -4,6 +4,9 @@ import com.davisiqueira.fraud_guard.common.response.ApiResponse;
 import com.davisiqueira.fraud_guard.dto.transaction.TransactionResponseDTO;
 import com.davisiqueira.fraud_guard.dto.transaction.TransactionsStatisticsDTO;
 import com.davisiqueira.fraud_guard.service.TransactionService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,8 +28,11 @@ public class TransactionAdminController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<TransactionResponseDTO>>> getTransactionsByUser(@PathVariable Long userId) {
-        List<TransactionResponseDTO> transactions = service.getTransactionsByUserId(userId);
+    public ResponseEntity<ApiResponse<Page<TransactionResponseDTO>>> getTransactionsByUser(
+            @PathVariable Long userId,
+            @PageableDefault() Pageable page
+    ) {
+        Page<TransactionResponseDTO> transactions = service.getTransactionsByUserId(userId, page);
 
         return new ResponseEntity<>(ApiResponse.of(transactions), HttpStatus.OK);
     }

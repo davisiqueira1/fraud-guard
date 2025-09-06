@@ -16,6 +16,8 @@ import com.davisiqueira.fraud_guard.service.fraud.FraudDetectionService;
 import com.davisiqueira.fraud_guard.util.StatisticalUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -60,10 +62,9 @@ public class TransactionService {
         return transactionMapper.toResponseDTO(saved);
     }
 
-    public List<TransactionResponseDTO> getTransactionsByUserId(Long userId) {
-        List<TransactionModel> transactions = transactionRepository.findAllByUserId(userId);
-
-        return transactions.stream().map(transactionMapper::toResponseDTO).toList();
+    public Page<TransactionResponseDTO> getTransactionsByUserId(Long userId, Pageable page) {
+        return transactionRepository.findAllByUserId(userId, page)
+                .map(transactionMapper::toResponseDTO);
     }
 
     public TransactionResponseDTO getTransactionById(Long id) {
