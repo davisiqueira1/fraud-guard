@@ -43,6 +43,7 @@ public class AuthenticationService {
 
     public void createUser(CreateUserDTO user) {
         UserModel newUser = UserModel.builder()
+                .cpf(user.cpf())
                 .email(user.email())
                 .password(securityConfiguration.passwordEncoder().encode(user.password()))
                 .roles(Set.of(RoleModel.builder().name(user.role()).build()))

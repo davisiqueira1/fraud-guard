@@ -34,6 +34,10 @@ public class UserDetailsImpl implements UserDetails {
         return user.getEmail();
     }
 
+    public String getCpf() {
+        return user.getCpf();
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;

@@ -1,15 +1,11 @@
 package com.davisiqueira.fraud_guard.dto.transaction;
 
-import com.davisiqueira.fraud_guard.validation.validator.cpf.ValidCpf;
 import jakarta.validation.constraints.DecimalMin;
 import org.hibernate.validator.constraints.Range;
 
 import java.math.BigDecimal;
 
 public record TransactionRequestDTO(
-        @ValidCpf
-        String cpf,
-
         @DecimalMin(value = "0.01", message = "Transaction value must be bigger than 0.")
         BigDecimal value,
 

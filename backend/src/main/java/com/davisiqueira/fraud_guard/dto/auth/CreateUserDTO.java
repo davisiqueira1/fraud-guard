@@ -1,11 +1,15 @@
 package com.davisiqueira.fraud_guard.dto.auth;
 
 import com.davisiqueira.fraud_guard.security.RoleName;
+import com.davisiqueira.fraud_guard.validation.validator.cpf.ValidCpf;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 
 public record CreateUserDTO(
+        @ValidCpf
+        String cpf,
+
         @Pattern(regexp = "^\\S+@\\S+\\.\\S+$", message = "Invalid e-mail.")
         String email,
 

@@ -1,5 +1,6 @@
 package com.davisiqueira.fraud_guard.model;
 
+import com.davisiqueira.fraud_guard.validation.validator.cpf.ValidCpf;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +20,9 @@ public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ValidCpf
+    private String cpf;
 
     @Column(unique = true)
     private String email;

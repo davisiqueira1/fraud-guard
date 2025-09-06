@@ -1,5 +1,6 @@
 package com.davisiqueira.fraud_guard.model;
 
+import com.davisiqueira.fraud_guard.validation.validator.cpf.ValidCpf;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,7 +21,7 @@ public class TransactionModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 11)
+    @ValidCpf
     private String cpf;
 
     @Column(nullable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP")

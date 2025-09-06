@@ -51,6 +51,7 @@ public class TransactionService {
 
         transaction.setDate(Instant.now());
         transaction.setUser(user);
+        transaction.setCpf(user.getCpf());
         transaction.setSuspect(fraudService.isSuspect(transaction));
 
         TransactionModel saved = transactionRepository.save(transaction);
