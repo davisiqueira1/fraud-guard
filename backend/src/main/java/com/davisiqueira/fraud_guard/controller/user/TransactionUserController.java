@@ -61,7 +61,7 @@ public class TransactionUserController {
                     )
             ),
             @ApiResponse(
-                    responseCode = "403",
+                    responseCode = "401",
                     description = "Unauthorized",
                     content = @Content(
                             mediaType = "application/json",
@@ -77,7 +77,7 @@ public class TransactionUserController {
 
     @Operation(
             summary = "Get user transactions",
-            description = "Retrieve a paginated list of transactions for th e authenticated user.",
+            description = "Retrieve a paginated list of transactions for the authenticated user.",
             tags = {"Transaction"}
     )
     @ApiResponses(value = {
@@ -90,7 +90,7 @@ public class TransactionUserController {
                     )
             ),
             @ApiResponse(
-                    responseCode = "403",
+                    responseCode = "401",
                     description = "Unauthorized",
                     content = @Content(
                             mediaType = "application/json",
@@ -111,12 +111,21 @@ public class TransactionUserController {
             tags = {"Transaction"}
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = TransactionResponseDTO.class))),
-            @ApiResponse(responseCode = "403", description = "Unauthorized",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ApiErrorResponse.class))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "OK",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = TransactionsStatisticsDTO.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ApiErrorResponse.class)
+                    )
             ),
     })
     @GetMapping("/statistics")
