@@ -26,6 +26,9 @@ public class SecurityConfiguration {
 
     public static final String[] ENDPOINTS_WITH_NO_AUTHENTICATION = {
             "/api/users/login",
+            "/swagger-ui.html",
+            "/swagger-ui/**",
+            "/v3/api-docs/**"
     };
 
     @Bean
