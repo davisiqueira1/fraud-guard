@@ -1,6 +1,6 @@
 package com.davisiqueira.fraud_guard.controller.admin;
 
-import com.davisiqueira.fraud_guard.common.response.ApiResponse;
+import com.davisiqueira.fraud_guard.common.response.DefaultApiResponse;
 import com.davisiqueira.fraud_guard.common.response.PageInfo;
 import com.davisiqueira.fraud_guard.dto.transaction.TransactionResponseDTO;
 import com.davisiqueira.fraud_guard.dto.transaction.TransactionsStatisticsDTO;
@@ -29,26 +29,26 @@ public class TransactionAdminController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<TransactionResponseDTO>>> getTransactionsByUser(
+    public ResponseEntity<DefaultApiResponse<List<TransactionResponseDTO>>> getTransactionsByUser(
             @PathVariable Long userId,
             @PageableDefault() Pageable page
     ) {
         Page<TransactionResponseDTO> transactions = service.getTransactionsByUserId(userId, page);
 
-        return new ResponseEntity<>(ApiResponse.of(transactions.getContent(), PageInfo.from(transactions)), HttpStatus.OK);
+        return new ResponseEntity<>(DefaultApiResponse.of(transactions.getContent(), PageInfo.from(transactions)), HttpStatus.OK);
     }
 
     @GetMapping("/suspect")
-    public ResponseEntity<ApiResponse<List<TransactionResponseDTO>>> getSuspectTransactions(@PathVariable Long userId) {
+    public ResponseEntity<DefaultApiResponse<List<TransactionResponseDTO>>> getSuspectTransactions(@PathVariable Long userId) {
         List<TransactionResponseDTO> suspectTransactions = service.getSuspectTransactions(userId);
 
-        return new ResponseEntity<>(ApiResponse.of(suspectTransactions), HttpStatus.OK);
+        return new ResponseEntity<>(DefaultApiResponse.of(suspectTransactions), HttpStatus.OK);
     }
 
     @GetMapping("/statistics")
-    public ResponseEntity<ApiResponse<TransactionsStatisticsDTO>> getTransactionsStats(@PathVariable Long userId) {
+    public ResponseEntity<DefaultApiResponse<TransactionsStatisticsDTO>> getTransactionsStats(@PathVariable Long userId) {
         TransactionsStatisticsDTO stats = service.getTransactionsStats(userId);
 
-        return new ResponseEntity<>(ApiResponse.of(stats), HttpStatus.OK);
+        return new ResponseEntity<>(DefaultApiResponse.of(stats), HttpStatus.OK);
     }
 }

@@ -1,6 +1,6 @@
 package com.davisiqueira.fraud_guard.controller.user;
 
-import com.davisiqueira.fraud_guard.common.response.ApiResponse;
+import com.davisiqueira.fraud_guard.common.response.DefaultApiResponse;
 import com.davisiqueira.fraud_guard.common.response.PageInfo;
 import com.davisiqueira.fraud_guard.dto.transaction.TransactionRequestDTO;
 import com.davisiqueira.fraud_guard.dto.transaction.TransactionResponseDTO;
@@ -35,22 +35,22 @@ public class TransactionUserController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<TransactionResponseDTO>> create(@RequestBody @Valid TransactionRequestDTO transaction) {
+    public ResponseEntity<DefaultApiResponse<TransactionResponseDTO>> create(@RequestBody @Valid TransactionRequestDTO transaction) {
         TransactionResponseDTO created = service.create(transaction, authenticatedUser.get().getUser().getId());
-        return new ResponseEntity<>(ApiResponse.of(created), HttpStatus.CREATED);
+        return new ResponseEntity<>(DefaultApiResponse.of(created), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<TransactionResponseDTO>>> getTransactionsByUser(@PageableDefault() Pageable page) {
+    public ResponseEntity<DefaultApiResponse<List<TransactionResponseDTO>>> getTransactionsByUser(@PageableDefault() Pageable page) {
         Page<TransactionResponseDTO> transactions = service.getTransactionsByUserId(authenticatedUser.get().getUser().getId(), page);
 
-        return new ResponseEntity<>(ApiResponse.of(transactions.getContent(), PageInfo.from(transactions)), HttpStatus.OK);
+        return new ResponseEntity<>(DefaultApiResponse.of(transactions.getContent(), PageInfo.from(transactions)), HttpStatus.OK);
     }
 
     @GetMapping("/statistics")
-    public ResponseEntity<ApiResponse<TransactionsStatisticsDTO>> getTransactionsStatsByUser() {
+    public ResponseEntity<DefaultApiResponse<TransactionsStatisticsDTO>> getTransactionsStatsByUser() {
         TransactionsStatisticsDTO stats = service.getTransactionsStats(authenticatedUser.get().getUser().getId());
 
-        return new ResponseEntity<>(ApiResponse.of(stats), HttpStatus.OK);
+        return new ResponseEntity<>(DefaultApiResponse.of(stats), HttpStatus.OK);
     }
 }
