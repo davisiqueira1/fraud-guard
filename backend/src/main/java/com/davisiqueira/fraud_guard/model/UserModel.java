@@ -22,6 +22,7 @@ public class UserModel {
     private Long id;
 
     @ValidCpf
+    @Column(unique = true)
     private String cpf;
 
     @Column(unique = true)
