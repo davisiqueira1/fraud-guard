@@ -1,6 +1,10 @@
 package com.davisiqueira.fraud_guard.config;
 
+import com.davisiqueira.fraud_guard.common.error.ApiErrorResponse;
 import com.davisiqueira.fraud_guard.security.UserAuthenticationFilter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.cglib.core.Local;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,16 +16,24 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.time.LocalDateTime;
+import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
     private final UserAuthenticationFilter userAuthenticationFilter;
+    private final ObjectMapper objectMapper;
 
-    public SecurityConfiguration(UserAuthenticationFilter userAuthenticationFilter) {
+
+    public SecurityConfiguration(UserAuthenticationFilter userAuthenticationFilter, ObjectMapper objectMapper) {
         this.userAuthenticationFilter = userAuthenticationFilter;
+        this.objectMapper = objectMapper;
     }
 
     public static final String[] ENDPOINTS_WITH_NO_AUTHENTICATION = {
@@ -32,7 +44,7 @@ public class SecurityConfiguration {
     };
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(http -> http.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
@@ -45,10 +57,52 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/admin", "/api/admin/**").hasRole("ADMINISTRATOR")
                         .anyRequest().authenticated()
                 )
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(authenticationEntryPoint())
+                        .accessDeniedHandler(accessDeniedHandler())
+                )
                 // Registers `UserAuthenticationFilter` to run before `UsernamePasswordAuthenticationFilter` in the filter chain.
                 .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 // It's possible to add multiple filters here.
                 .build();
+    }
+
+    @Bean
+    AuthenticationEntryPoint authenticationEntryPoint() {
+        return (request, response, authException) -> {
+            final int statusCode = HttpServletResponse.SC_UNAUTHORIZED;
+            response.setStatus(statusCode);
+            response.setContentType("application/json;charset=UTF-8");
+            ApiErrorResponse body = new ApiErrorResponse(
+                    "Missing or invalid token.",
+                    request.getRequestURI(),
+                    statusCode,
+                    Map.ofEntries(
+                            Map.entry(authException.getClass().getSimpleName(), authException.getMessage())
+                    ),
+                    LocalDateTime.now()
+            );
+            response.getWriter().write(objectToJson(body));
+        };
+    }
+
+    @Bean
+    AccessDeniedHandler accessDeniedHandler() {
+        return (request, response, accessDeniedException) -> {
+            final int statusCode = HttpServletResponse.SC_FORBIDDEN;
+            response.setStatus(statusCode);
+            response.setContentType("application/json;charset=UTF-8");
+            ApiErrorResponse body = new ApiErrorResponse(
+                    "Insufficient permission: ROLE_ADMINISTRATOR is required.",
+                    request.getRequestURI(),
+                    statusCode,
+                    Map.ofEntries(
+                            Map.entry(accessDeniedException.getClass().getSimpleName(), accessDeniedException.getMessage())
+                    ),
+                    LocalDateTime.now()
+            );
+            response.getWriter().write(objectToJson(body));
+        };
     }
 
     @Bean
@@ -61,4 +115,11 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
+    private String objectToJson(Object o) {
+        try {
+            return objectMapper.writeValueAsString(o);
+        } catch (Exception e) {
+            return "{\"error\":\"serialization error\"}";
+        }
+    }
 }
