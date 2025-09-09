@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
+@Tag(name = "Administrator", description = "Administrator operations (requires ROLE_ADMINISTRATOR)")
 @Controller
 @Validated
 @RequestMapping("/api/users/{userId}/transactions")
@@ -52,6 +54,14 @@ public class TransactionAdminController {
             @ApiResponse(
                     responseCode = "401",
                     description = "Unauthorized",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ApiErrorResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ApiErrorResponse.class)
@@ -89,6 +99,14 @@ public class TransactionAdminController {
                             mediaType = "application/json",
                             schema = @Schema(implementation = ApiErrorResponse.class)
                     )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ApiErrorResponse.class)
+                    )
             )
     })
     @GetMapping("/suspect")
@@ -115,6 +133,14 @@ public class TransactionAdminController {
             @ApiResponse(
                     responseCode = "401",
                     description = "Unauthorized",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ApiErrorResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ApiErrorResponse.class)
