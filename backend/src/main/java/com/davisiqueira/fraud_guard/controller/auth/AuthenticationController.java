@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,7 @@ public class AuthenticationController {
             description = "Creates a new user based on the provided cpf, email and password.",
             tags = {"Authentication"}
     )
+    @SecurityRequirements()
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201",
@@ -58,6 +60,7 @@ public class AuthenticationController {
             description = "Tries to login based on the provided email and password.",
             tags = {"Authentication"}
     )
+    @SecurityRequirements()
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
