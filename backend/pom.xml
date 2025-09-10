@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.davisiqueira</groupId>
 	<artifactId>fraud-guard</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>fraud-guard</name>
 	<description>Transaction analysis system with fraud alerts and a robust architecture in Spring Boot + AWS.</description>
 	<url/>
