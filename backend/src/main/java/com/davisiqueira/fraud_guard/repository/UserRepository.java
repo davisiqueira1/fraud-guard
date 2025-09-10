@@ -10,6 +10,7 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<UserModel, Long> {
     Optional<UserModel> findByEmail(String email);
+    Optional<UserModel> findByCpf(String cpf);
 
     @EntityGraph(attributePaths = "roles")
     Optional<UserModel> findWithRolesByEmail(String email);

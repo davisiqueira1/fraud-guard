@@ -4,6 +4,7 @@ import com.davisiqueira.fraud_guard.config.SecurityConfiguration;
 import com.davisiqueira.fraud_guard.dto.auth.CreateUserDTO;
 import com.davisiqueira.fraud_guard.dto.auth.LoginRequestDTO;
 import com.davisiqueira.fraud_guard.dto.auth.LoginResponseDTO;
+import com.davisiqueira.fraud_guard.exception.CpfUniqueConstraintViolation;
 import com.davisiqueira.fraud_guard.model.RoleModel;
 import com.davisiqueira.fraud_guard.model.UserModel;
 import com.davisiqueira.fraud_guard.repository.RoleRepository;
@@ -50,6 +51,11 @@ public class AuthenticationService {
 
         RoleModel role = roleRepository.findByName(roleName)
                 .orElseGet(() -> roleRepository.save(RoleModel.builder().name(roleName).build()));
+
+        boolean cpfAlreadyExists = userRepository.findByCpf(user.cpf()).isPresent();
+        if (cpfAlreadyExists) {
+            throw new CpfUniqueConstraintViolation("A user with the provided CPF already exists.");
+        }
 
         UserModel newUser = UserModel.builder()
                 .cpf(user.cpf())

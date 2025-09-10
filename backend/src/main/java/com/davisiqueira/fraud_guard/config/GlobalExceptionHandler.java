@@ -3,6 +3,7 @@ package com.davisiqueira.fraud_guard.config;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.davisiqueira.fraud_guard.common.error.ApiErrorResponse;
+import com.davisiqueira.fraud_guard.exception.CpfUniqueConstraintViolation;
 import com.davisiqueira.fraud_guard.exception.MissingCredentialsException;
 import com.davisiqueira.fraud_guard.exception.TransactionNotFoundException;
 import com.davisiqueira.fraud_guard.exception.UserNotFoundException;
@@ -132,6 +133,19 @@ public class GlobalExceptionHandler {
         );
 
         ApiErrorResponse response = buildResponse("Transaction not found with the provided identification", request, status, errors);
+
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ExceptionHandler(CpfUniqueConstraintViolation.class)
+    public ResponseEntity<ApiErrorResponse> handleCpfUniqueConstraintViolation(CpfUniqueConstraintViolation e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        Map<String, String> errors = Map.ofEntries(
+                Map.entry(e.getClass().getSimpleName(), e.getLocalizedMessage())
+        );
+
+        ApiErrorResponse response = buildResponse("Constraint violation", request, status, errors);
 
         return new ResponseEntity<>(response, status);
     }
