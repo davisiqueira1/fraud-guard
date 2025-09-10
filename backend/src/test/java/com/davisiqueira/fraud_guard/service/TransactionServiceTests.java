@@ -65,7 +65,7 @@ public class TransactionServiceTests {
             TransactionModel transaction = new TransactionModel();
             UserModel user = new UserModel();
 
-            TransactionRequestDTO dto = new TransactionRequestDTO(null, null, null, null);
+            TransactionRequestDTO dto = new TransactionRequestDTO(null, null, null);
 
             TransactionModel saved = new TransactionModel();
             saved.setId(transactionId);
@@ -99,8 +99,8 @@ public class TransactionServiceTests {
             final Long userId = 1L;
             final Long transactionId = 2L;
 
-            TransactionRequestDTO requestDto = new TransactionRequestDTO(null, null, null, null);
-            UserModel user = new UserModel(userId, null, null, null, null);
+            TransactionRequestDTO requestDto = new TransactionRequestDTO(null, null, null);
+            UserModel user = new UserModel(userId, null, null, null, null, null);
             TransactionModel mapped = new TransactionModel();
             TransactionModel saved = new TransactionModel();
             saved.setId(2L);
