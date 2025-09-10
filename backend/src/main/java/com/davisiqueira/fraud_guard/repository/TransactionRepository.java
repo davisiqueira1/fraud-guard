@@ -23,7 +23,7 @@ public interface TransactionRepository extends JpaRepository<TransactionModel, L
     @Query(value = "SELECT COUNT(*) FROM transactions t WHERE t.date >= :date AND t.user_id = :userId", nativeQuery = true)
     int countUserTransactionsSince(@Param("date") LocalDateTime date, @Param("userId") Long userId);
 
-    List<TransactionModel> findAllBySuspectAndUserId(Boolean suspect, Long id);
+    Page<TransactionModel> findAllBySuspectAndUserId(Boolean suspect, Long id, Pageable pageable);
 
     Long user(UserModel user);
 }

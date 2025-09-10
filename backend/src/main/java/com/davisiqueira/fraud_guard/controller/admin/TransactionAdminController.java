@@ -110,10 +110,13 @@ public class TransactionAdminController {
             )
     })
     @GetMapping("/suspect")
-    public ResponseEntity<DefaultApiResponse<List<TransactionResponseDTO>>> getSuspectTransactions(@PathVariable Long userId) {
-        List<TransactionResponseDTO> suspectTransactions = service.getSuspectTransactions(userId);
+    public ResponseEntity<DefaultApiResponse<List<TransactionResponseDTO>>> getSuspectTransactions(
+            @PathVariable Long userId,
+            @PageableDefault() Pageable page
+    ) {
+        Page<TransactionResponseDTO> suspectTransactions = service.getSuspectTransactions(userId, page);
 
-        return new ResponseEntity<>(DefaultApiResponse.of(suspectTransactions), HttpStatus.OK);
+        return new ResponseEntity<>(DefaultApiResponse.of(suspectTransactions.getContent(), PageInfo.from(suspectTransactions)), HttpStatus.OK);
     }
 
     @Operation(

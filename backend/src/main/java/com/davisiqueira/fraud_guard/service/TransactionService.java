@@ -78,10 +78,9 @@ public class TransactionService {
         return transactionMapper.toResponseDTO(transaction.get());
     }
 
-    public List<TransactionResponseDTO> getSuspectTransactions(Long userId) {
-        List<TransactionModel> transactions = transactionRepository.findAllBySuspectAndUserId(true, userId);
-
-        return transactions.stream().map(transactionMapper::toResponseDTO).toList();
+    public Page<TransactionResponseDTO> getSuspectTransactions(Long userId, Pageable page) {
+        return transactionRepository.findAllBySuspectAndUserId(true, userId, page)
+                .map(transactionMapper::toResponseDTO);
     }
 
     public TransactionsStatisticsDTO getTransactionsStats(Long userId) {
