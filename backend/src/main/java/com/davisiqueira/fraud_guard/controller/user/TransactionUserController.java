@@ -46,11 +46,7 @@ public class TransactionUserController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201",
-                    description = "Created",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = TransactionResponseDTO.class)
-                    )
+                    description = "Created"
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -70,9 +66,9 @@ public class TransactionUserController {
             ),
     })
     @PostMapping
-    public ResponseEntity<DefaultApiResponse<TransactionResponseDTO>> create(@RequestBody @Valid TransactionRequestDTO transaction) {
-        TransactionResponseDTO created = service.create(transaction, authenticatedUser.get().getUser().getId());
-        return new ResponseEntity<>(DefaultApiResponse.of(created), HttpStatus.CREATED);
+    public ResponseEntity<Void> create(@RequestBody @Valid TransactionRequestDTO transaction) {
+        service.create(transaction, authenticatedUser.get().getUser().getId());
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Operation(
